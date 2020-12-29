@@ -36,6 +36,7 @@ public class NIOServer {
                     System.out.println("有新客户端连接");
                     //该客户端生成一个socketChannel
                     SocketChannel socketChannel = serverSocketChannel.accept();
+                    socketChannel.configureBlocking(false);
                     SelectionKey register = socketChannel.register(
                             selector,
                             SelectionKey.OP_READ,
