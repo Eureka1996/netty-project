@@ -1,12 +1,15 @@
 package com.wufuqiang.netty.simple;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.CharsetUtil;
 
 public class NettyClient {
     public static void main(String[] args) throws Exception {
@@ -26,7 +29,16 @@ public class NettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new NettyClientHandler()); //加入自己的处理器
+                            ChannelPipeline pipeline = ch.pipeline();
+//                            pipeline.channel().writeAndFlush(Unpooled.copiedBuffer("客户端发往服务端：", CharsetUtil.UTF_8));
+
+                            pipeline.addLast(new NettyClientInHandler1());
+                            pipeline.addLast(new NettyClientInHandler2());
+
+                            pipeline.addFirst(new NettyClientOutHandler1());
+                            pipeline.addLast(new NettyClientOutHandler2());
+
+//                            ch.pipeline().addLast(new NettyClientHandler()); //加入自己的处理器
                         }
                     });
 

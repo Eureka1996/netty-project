@@ -8,10 +8,11 @@ import io.netty.util.CharsetUtil;
 
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     //当通道就绪就会触发该方法
+    //handler链上只有第一个handler会调用此方法
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("client " + ctx);
-        ctx.writeAndFlush(Unpooled.copiedBuffer("hello, server: (>^ω^<)喵", CharsetUtil.UTF_8));
+//        ctx.writeAndFlush(Unpooled.copiedBuffer("hello, server: (>^ω^<)喵", CharsetUtil.UTF_8));
     }
 
     //当通道有读取事件时，会触发
