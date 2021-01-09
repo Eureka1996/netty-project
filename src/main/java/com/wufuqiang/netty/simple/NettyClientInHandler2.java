@@ -20,8 +20,9 @@ public class NettyClientInHandler2 extends ChannelInboundHandlerAdapter {
         Thread.sleep(10000);
 //        ctx.writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
         System.out.println("write");
-        ctx.write(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
-        ctx.flush();
+        ctx.channel().writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
+//        ctx.write(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
+//        ctx.flush();
 //
 //        ctx.writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"in1",CharsetUtil.UTF_8));
 //        ctx.writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"in2",CharsetUtil.UTF_8));
