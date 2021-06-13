@@ -8,10 +8,11 @@ import java.nio.channels.*;
 import java.util.Iterator;
 
 public class GroupChatServer {
-    //定义属性
+    //定义选择器
     private Selector selector;
     //专门做监听
     private ServerSocketChannel listenChannel;
+    //要监听的端口号
     private static final int PORT = 6667;
 
     //构造器
@@ -50,6 +51,7 @@ public class GroupChatServer {
 
                     //遍历得到selectionKey 集合
                     Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+                    //依次处理每一个监听到的事件
                     while (iterator.hasNext()) {
                         //取出selectionkey
                         SelectionKey key = iterator.next();
@@ -57,6 +59,7 @@ public class GroupChatServer {
                         //监听到accept
                         if(key.isAcceptable()) {
                             SocketChannel sc = listenChannel.accept();
+                            //设置非阻塞
                             sc.configureBlocking(false);
                             //将该 sc 注册到seletor
                             sc.register(selector, SelectionKey.OP_READ);
@@ -67,7 +70,6 @@ public class GroupChatServer {
                         }
                         if(key.isReadable()) { //通道发送read事件，即通道是可读的状态
                             //处理读 (专门写方法..)
-
                             readData(key);
 
                         }
@@ -96,13 +98,13 @@ public class GroupChatServer {
         SocketChannel channel = null;
 
         try {
-            //得到channel
+            //通过SelectorKey得到channel
             channel = (SocketChannel) key.channel();
             //创建buffer
             ByteBuffer buffer = ByteBuffer.allocate(1024);
 
             int count = channel.read(buffer);
-            //根据count的值做处理
+            //根据count的值做处理，count>0就是读到了数据
             if(count > 0) {
                 //把缓存区的数据转成字符串
                 String msg = new String(buffer.array());
@@ -132,6 +134,7 @@ public class GroupChatServer {
         System.out.println("服务器转发消息中...");
         System.out.println("服务器转发数据给客户端线程: " + Thread.currentThread().getName());
         //遍历 所有注册到selector 上的 SocketChannel,并排除 self
+        //selector.keys和selector.selectedKeys的区别
         for(SelectionKey key: selector.keys()) {
 
             //通过 key  取出对应的 SocketChannel
@@ -150,7 +153,7 @@ public class GroupChatServer {
         }
 
     }
-
+    //主方法
     public static void main(String[] args) {
 
         //创建服务器对象

@@ -41,6 +41,7 @@ public class NettyServer {
                             ch.pipeline().addLast(new NettyServerHandler());
                         }
                     }); // 给我们的workerGroup 的 EventLoop 对应的管道设置处理器
+//                    .childHandler((ch)->{});
 
             System.out.println(".....服务器 is ready...");
 
@@ -58,6 +59,14 @@ public class NettyServer {
                     } else {
                         System.out.println("监听端口 6668 失败");
                     }
+                }
+            });
+
+            cf.addListener((future)->{
+                if (cf.isSuccess()) {
+                    System.out.println("监听端口 6668 成功");
+                } else {
+                    System.out.println("监听端口 6668 失败");
                 }
             });
 

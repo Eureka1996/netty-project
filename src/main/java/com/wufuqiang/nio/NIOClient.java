@@ -27,10 +27,11 @@ public class NIOClient {
 
         //连接服务器成功
         String str = "吴福强";
-
+        //将byte数组转换为ByteBuffer
         ByteBuffer buffer = ByteBuffer.wrap(str.getBytes());
 
         socketChannel.write(buffer);
         System.in.read();
+        socketChannel.close();
     }
 }
