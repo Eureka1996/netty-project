@@ -5,33 +5,13 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author: Wu Fuqiang
  * @create: 2021-06-11 18:16
  */
 public class FileChannelDemo {
-    public static void main(String[] args) throws IOException {
-
-        FileInputStream fileInputStream1 = new FileInputStream("OIP.jpeg");
-        FileChannel channel1 = fileInputStream1.getChannel();
-
-        FileOutputStream fileOutputStream1 = new FileOutputStream("OIP-copy.jpeg");
-        FileChannel channel2 = fileOutputStream1.getChannel();
-
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
-
-        while (true) {
-            buffer.clear();
-            int read = channel1.read(buffer);
-            if(read == -1) break;
-            buffer.flip();
-            channel2.write(buffer);
-
-        }
-        fileInputStream1.close();
-        fileOutputStream1.close();
-    }
 
     /**
      * 利用FileChannel将String写入文件中
@@ -45,6 +25,14 @@ public class FileChannelDemo {
         // 获取输出流渠道
         FileChannel channel = fileOutputStream.getChannel();
         // 定义Buffer
+        /**
+         * ByteBuffer正确使用姿势：
+         * 1、向buffer写入数据，例如调用channel.read(buffer)
+         * 2、调用flip()切换到读模式
+         * 3、从buffer读取数据，例如调用buffer.get()
+         * 4、调用clear()或compact()切换至写模式
+         * 5、重复1~4步骤
+         */
         ByteBuffer buf = ByteBuffer.allocate(1024);
 
         buf.put(str.getBytes());
@@ -70,6 +58,26 @@ public class FileChannelDemo {
         fileInputStreamChannel.read(buf2);
         String str2 = new String(buf2.array());
         System.out.println(str2);
+    }
+
+    @Test
+    public void readTxtFile2() throws IOException {
+        //读文件
+        File file = new File("test1.txt");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        FileChannel fileInputStreamChannel = fileInputStream.getChannel();
+
+        ByteBuffer a = ByteBuffer.allocate(3);
+        ByteBuffer b = ByteBuffer.allocate(3);
+        ByteBuffer c = ByteBuffer.allocate(5);
+
+        fileInputStreamChannel.read(new ByteBuffer[]{a,b,c});
+        a.flip();
+        b.flip();
+        c.flip();
+        System.out.println(StandardCharsets.UTF_8.decode(a));
+        System.out.println(StandardCharsets.UTF_8.decode(b));
+        System.out.println(StandardCharsets.UTF_8.decode(c));
     }
 
     /**
