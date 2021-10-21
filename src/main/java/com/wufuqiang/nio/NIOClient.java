@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.StandardCharsets;
 
 public class NIOClient {
     public static void main(String[] args) throws IOException {
@@ -27,9 +28,10 @@ public class NIOClient {
 
         //连接服务器成功
         String str = "吴福强";
-        //将byte数组转换为ByteBuffer
-        ByteBuffer buffer = ByteBuffer.wrap(str.getBytes());
+        str = "0123456789wufuqiang";
 
+        //将byte数组转换为ByteBuffer
+        ByteBuffer buffer = StandardCharsets.UTF_8.encode(str);
         socketChannel.write(buffer);
         System.in.read();
         socketChannel.close();

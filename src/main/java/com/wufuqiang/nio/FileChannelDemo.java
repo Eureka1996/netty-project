@@ -110,4 +110,20 @@ public class FileChannelDemo {
         fileInputStream1.close();
         fileOutputStream1.close();
     }
+
+    @Test
+    public void transfer(){
+        String FROM = "";
+        String TO = "";
+
+        try(FileChannel from = new FileInputStream(FROM).getChannel();
+            FileChannel to = new FileOutputStream(TO).getChannel()
+        ){
+            // 效率高，底层会利用操作系统的零拷贝进行优化，
+            // 一次最多传2G
+            from.transferTo(0,from.size(),to);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }

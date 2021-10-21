@@ -31,7 +31,7 @@ public class BasicBuffer {
     @Test
     public void string2ByteBuffer(){
         // 字符串转ByteBuffer，方法1
-        String str = "wufuqiang is a boy-----";
+        String str = "wufuqiang(吴福强) is a boy-----";
         ByteBuffer buffer = ByteBuffer.allocate(50);
         // 将字符串转为byte数组
         buffer.put(str.getBytes());
@@ -66,5 +66,20 @@ public class BasicBuffer {
         //for (byte buff : buffer3.array()) {
         //    System.out.println((char)buff);
         //}
+    }
+
+    @Test
+    public void halfPackage(){
+        ByteBuffer source = ByteBuffer.allocate(32);
+        source.put("hello,world\nI`m wufuqiang\nHo".getBytes());
+        split(source);
+        source.put("w are you?\n".getBytes());
+        split(source);
+    }
+
+    public void split(ByteBuffer source){
+        source.flip();
+
+        source.compact();
     }
 }
