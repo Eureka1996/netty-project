@@ -16,11 +16,12 @@ public class NettyClientInHandler2 extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf buf = (ByteBuf)msg;
-        System.out.println("handler2:"+buf.toString(CharsetUtil.UTF_8));
+        System.out.println("inbound handler2 channelRead:"+buf.toString(CharsetUtil.UTF_8));
         Thread.sleep(10000);
+        ctx.fireChannelRead(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-> inbound handler1",CharsetUtil.UTF_8));
 //        ctx.writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
-        System.out.println("write");
-        ctx.channel().writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
+//        System.out.println("write");
+        //ctx.channel().writeAndFlush(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
 //        ctx.write(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-handler2",CharsetUtil.UTF_8));
 //        ctx.flush();
 //

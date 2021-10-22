@@ -34,7 +34,7 @@ public class NettyClient {
 
                             pipeline.addLast(new NettyClientInHandler1());
                             pipeline.addLast(new NettyClientInHandler2());
-
+                            //
                             pipeline.addFirst(new NettyClientOutHandler1());
                             pipeline.addLast(new NettyClientOutHandler2());
 

@@ -11,7 +11,7 @@ public class NettyClientOutHandler1 extends ChannelOutboundHandlerAdapter {
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         ByteBuf buf = (ByteBuf)msg;
-        System.out.println("out handler1:"+buf.toString(CharsetUtil.UTF_8));
+        System.out.println("out handler1:"+buf.toString(CharsetUtil.UTF_8)+"->"+System.currentTimeMillis());
         ctx.write(Unpooled.copiedBuffer(buf.toString(CharsetUtil.UTF_8)+"-out handler1",CharsetUtil.UTF_8));
         ctx.flush();
     }

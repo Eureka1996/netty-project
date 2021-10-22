@@ -83,7 +83,7 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //将 msg 转成一个 ByteBuf
         //ByteBuf 是 Netty 提供的，不是 NIO 的 ByteBuffer.
         ByteBuf buf = (ByteBuf) msg;
-        System.out.println("客户端发送消息是:" + buf.toString(CharsetUtil.UTF_8));
+        System.out.println("服务端接收到从客户端发送过来的消息:" + buf.toString(CharsetUtil.UTF_8));
 //        System.out.println("客户端地址:" + channel.remoteAddress());
     }
 
@@ -94,9 +94,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //writeAndFlush 是 write + flush
         //将数据写入到缓存，并刷新
         //一般讲，我们对这个发送的数据进行编码
-        ctx.writeAndFlush(Unpooled.copiedBuffer("服务器发往客户端：", CharsetUtil.UTF_8));
+        ctx.writeAndFlush(Unpooled.copiedBuffer("服务端发送的信息->" + System.currentTimeMillis(), CharsetUtil.UTF_8));
     }
-
     //处理异常, 一般是需要关闭通道
 
     @Override
