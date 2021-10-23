@@ -1,12 +1,16 @@
 package com.wufuqiang.netty.simple;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
-public class NettyServer {
+@Slf4j
+public class NettyServer2 {
     public static void main(String[] args) throws Exception {
 
 
@@ -19,6 +23,8 @@ public class NettyServer {
         //   默认实际 cpu核数 * 2
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(); //8
+
+        EventLoopGroup defaultGroup = new DefaultEventLoopGroup();
 
         try {
             //创建服务器端的启动对象，配置参数，负责组装netty组件，启动服务器
@@ -38,6 +44,15 @@ public class NettyServer {
                             // 对应的 NIOEventLoop 的 taskQueue 或者 scheduleTaskQueue
                             System.out.println("客户socketchannel hashcode=" + ch.hashCode());
                             ch.pipeline().addLast(new NettyServerHandler());
+
+                            ch.pipeline().addLast(defaultGroup,"inbound handler2",new ChannelInboundHandlerAdapter(){
+                                @Override
+                                public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                                    ByteBuf buf = (ByteBuf)msg;
+                                    log.debug(buf.toString(CharsetUtil.UTF_8));
+                                    //super.channelRead(ctx, msg);
+                                }
+                            });
                         }
                     }); // 给我们的workerGroup 的 EventLoop 对应的管道设置处理器
 //                    .childHandler((ch)->{});

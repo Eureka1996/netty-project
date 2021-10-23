@@ -7,7 +7,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelPipeline;
 import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
     //读取数据实际(这里我们可以读取客户端发送的消息)
     /*
@@ -83,7 +85,8 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         //将 msg 转成一个 ByteBuf
         //ByteBuf 是 Netty 提供的，不是 NIO 的 ByteBuffer.
         ByteBuf buf = (ByteBuf) msg;
-        System.out.println("服务端接收到从客户端发送过来的消息:" + buf.toString(CharsetUtil.UTF_8));
+        log.debug("服务端接收到从客户端发送过来的消息:" + buf.toString(CharsetUtil.UTF_8));
+        ctx.fireChannelRead(msg);
 //        System.out.println("客户端地址:" + channel.remoteAddress());
     }
 
